@@ -1,0 +1,12 @@
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\bin\Debug\Lab2HomeTask.exe.config
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\bin\Debug\Lab2HomeTask.exe
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\bin\Debug\Lab2HomeTask.pdb
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.csproj.AssemblyReference.cache
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.StudentForm.resources
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.Properties.Resources.resources
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.csproj.GenerateResource.cache
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.csproj.CoreCompileInputs.cache
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.exe
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.pdb
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.CoursesCRUD.resources
+E:\DB_LABS\Week2\Lab2HomeTask\Lab2HomeTask\obj\Debug\Lab2HomeTask.ResultCRUD.resources
