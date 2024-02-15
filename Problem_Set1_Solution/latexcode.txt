@@ -1,0 +1,486 @@
+\documentclass[10pt]{article}
+	
+	\usepackage{float}
+	\usepackage[T1]{fontenc}
+	\usepackage{graphicx}
+	\usepackage[utf8]{inputenc}
+	\usepackage[paperheight=27.94cm,paperwidth=21.59cm,left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+	
+	
+	\setlength\parindent{0pt}
+	\renewcommand{\arraystretch}{1.3}
+	
+	
+	
+	\begin{document}
+	
+	\vspace{1\baselineskip}
+	\begin{center}
+	{\LARGE CS262- Problem Set 1}
+	\end{center}
+	
+	
+	\begin{center}
+	{\LARGE CS262- Data Base Systems}
+	\end{center}
+	
+	
+	\vspace{1\baselineskip}
+	\begin{center}
+	{\large Muhammad Mudassir \ \ \ \ \ 2022-CS-32}
+	\end{center}
+	
+	
+	\vspace{1\baselineskip}
+	\begin{center}
+	{\large February 15, 2024}
+	\end{center}
+	
+	
+	\vspace{1\baselineskip}
+	{\Large \textbf{Problem 1: Products with Cost Above Average}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	\begin{center}
+	{\huge \textsuperscript{$\pi$}}{\tiny name}{\huge \textsuperscript{($\sigma$}}{\tiny cost>avg cost}{\huge \textsuperscript{(Product} \textsuperscript{$\times$} \textsuperscript{($\rho$}}{\tiny avg cost}{\huge \textsuperscript{($\gamma$}}{\tiny avg(cost)}{\huge \textsuperscript{(Product)))))}}
+	\end{center}
+	
+	
+	\noindent\hspace{5.5cm}\makebox[0.08cm]{\hrulefill}\noindent\hspace{3.07cm}\makebox[0.08cm]{\hrulefill}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	\vspace{1\baselineskip}
+	Cartesian Product SELECT name
+	
+	\vspace{1\baselineskip}
+	FROM Product, (SELECT AVG(cost) AS Avg-cost FROM Product) AS Avg-table WHERE cost > Avg-cost;
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT name
+	
+	\vspace{1\baselineskip}
+	FROM Product
+	
+	\vspace{1\baselineskip}
+	JOIN (SELECT AVG(cost) AS Avg-cost FROM Product) AS Avg-table
+	
+	\vspace{1\baselineskip}
+	ON cost > Avg-cost;
+	
+	\vspace{1\baselineskip}
+	{\small \textbf{Subquery} SELECT name FROM Product}
+	
+	WHERE cost > (SELECT AVG(cost) FROM Product);
+	
+	\vspace{1\baselineskip}
+	{\Large \textbf{Problem 2: Companies whose Products are Bought by Aslam}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	\begin{center}
+	$\pi${\large \textsubscript{name}}($\sigma${\large \textsubscript{buyer$=$}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\large  \textsubscript{Aslam}}{\fontsize{4pt}{4.8pt}\selectfont ′} (Purchase ▷◁ Company))
+	\end{center}
+	
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	\vspace{1\baselineskip}
+	{\small Cartesian Product }
+	
+	{\small SELECT DISTINCT C.name FROM Company C, Purchase P}
+	
+	\vspace{1\baselineskip}
+	WHERE C.name $=$ P.company AND P.buyer $=$ ’Aslam’;
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT C.name
+	
+	\vspace{1\baselineskip}
+	FROM Company C
+	
+	\vspace{1\baselineskip}
+	JOIN Purchase P ON C.name $=$ P.company
+	
+	\vspace{1\baselineskip}
+	WHERE P.buyer $=$ ’Aslam’;
+	
+	\vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT name
+	
+	\vspace{1\baselineskip}
+	FROM Company
+	
+	\vspace{1\baselineskip}
+	WHERE name IN (SELECT company FROM Purchase WHERE buyer $=$ ’Aslam’);
+\vspace{1\baselineskip}
+	{\Large \textbf{Problem 3: Products More Expensive than Unilever’s}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	{\huge \textsuperscript{$\pi$}}{\tiny name}{\huge \textsuperscript{($\sigma$}}{\tiny cost>max cost}{\huge \textsuperscript{(Product}}{\small  $\times$}{\huge  \textsuperscript{($\rho$}}{\tiny max cost}{\huge \textsuperscript{($\gamma$}}{\tiny max(cost)}{\huge \textsuperscript{($\sigma$}}{\tiny maker$=$}{\small \textsuperscript{′}}{\tiny  Unilever}{\small \textsuperscript{′}}{\huge  \textsuperscript{(Product))))))}}
+	
+	\noindent\hspace{4.06cm}\makebox[0.08cm]{\hrulefill}\noindent\hspace{3.17cm}\makebox[0.08cm]{\hrulefill}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	Cartesian Product SELECT name
+	
+	\vspace{1\baselineskip}
+	FROM Product, (SELECT MAX(cost) AS max\_cost FROM Product WHERE maker $=$ ’Unilever’) AS max\_table WHERE cost > max\_cost;
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT name
+	
+	\vspace{1\baselineskip}
+	FROM Product
+	
+	\vspace{1\baselineskip}
+	JOIN (SELECT MAX(cost) AS max\_cost FROM Product WHERE maker $=$ ’Unilever’) AS max\_table ON cost > max\_cost;
+	
+	\vspace{1\baselineskip}
+	{\small \textbf{Subquery }SELECT name FROM Product}
+	
+	WHERE cost > (SELECT MAX(cost) FROM Product WHERE maker $=$ ’Unilever’);
+	
+	\vspace{1\baselineskip}
+	{\Large \textbf{Problem 4: Copy Cat Products}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	{\huge \textsuperscript{$\pi$}}{\tiny Product.name, Product.maker}{\huge \textsuperscript{($\sigma$}}{\tiny Product.maker̸$=$}{\small \textsuperscript{′}}{\tiny  Unilever}{\small \textsuperscript{′}}{\tiny  $\wedge$Product.name$\in$($\pi$}{\small \textsubscript{name}}{\tiny ($\sigma$}{\small \textsubscript{maker$=$}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\small  \textsubscript{Unilever}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\tiny  (Product)))}{\huge \textsuperscript{(Product))}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	\vspace{1\baselineskip}
+	{\small Cartesian Product SELECT P1.name, P1.maker}
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1, Product AS P2
+	
+	\vspace{1\baselineskip}
+	WHERE P1.maker <> ’Unilever’ AND P1.name $=$ P2.name AND P2.maker $=$ ’Unilever’;
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT P1.name, P1.maker
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1
+	
+	\vspace{1\baselineskip}
+	JOIN Product AS P2 ON P1.name $=$ P2.name
+	
+	\vspace{1\baselineskip}
+	WHERE P1.maker <> ’Unilever’ AND P2.maker $=$ ’Unilever’;
+	
+	\vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT name, maker
+	
+	\vspace{1\baselineskip}
+	FROM Product
+	
+	\vspace{1\baselineskip}
+	WHERE maker <> ’Unilever’ AND name IN (SELECT name FROM Product WHERE maker $=$ ’Unilever’);
+	
+	\vspace{1\baselineskip}
+	{\Large \textbf{Problem 5: Buyers of Products Produced in Lahore}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	$\pi${\large \textsubscript{buyer}}($\sigma${\large \textsubscript{city$=$}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\large  \textsubscript{Lahore}}{\fontsize{4pt}{4.8pt}\selectfont ′} (Product ▷◁ Purchase))
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	{\small Cartesian Product SELECT }
+	
+	\vspace{1\baselineskip}
+	DISTINCT buyer
+
+        \vspace{1\baselineskip}
+        FROM Product, Purchase
+	\vspace{1\baselineskip}
+	WHERE Product.name = Purchase.product AND Product.city = ’Lahore’;
+ 
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT buyer
+	
+	\vspace{1\baselineskip}
+	FROM Product
+	
+	\vspace{1\baselineskip}
+	JOIN Purchase ON Product.name = Purchase.product
+	
+	\vspace{1\baselineskip}
+	WHERE Product.city = ’Lahore’;
+
+        \vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT buyer
+	
+	\vspace{1\baselineskip}
+	FROM Purchase
+	
+	\vspace{1\baselineskip}
+	WHERE product IN (SELECT name FROM Product WHERE city = ’Lahore’);
+
+
+        \vspace{1\baselineskip}
+	{\Large \textbf{Problem 6: Buyers Who Only Buy Products Made in Karachi}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	$\pi${\large \textsubscript{buyer}}($\sigma${\large \textsubscript{city$=$}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\large  \textsubscript{Karachi}}{\fontsize{4pt}{4.8pt}\selectfont ′} (Product ▷◁ Purchase) $-$ $\pi${\large \textsubscript{buyer}}($\sigma${\large \textsubscript{city̸$=$}}{\fontsize{4pt}{4.8pt}\selectfont ′}{\large  \textsubscript{Karachi}}{\fontsize{4pt}{4.8pt}\selectfont ′} (Product ▷◁ Purchase)))
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	\vspace{1\baselineskip}
+	{\small Cartesian Product SELECT DISTINCT P1.buyer}
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1, Product AS P2, Purchase
+	
+	\vspace{1\baselineskip}
+	WHERE P1.name $=$ Purchase.product AND P2.name $=$ Purchase.product AND P1.city $=$ ’Karachi’ AND P2.city
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT P1.buyer
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1
+	
+	\vspace{1\baselineskip}
+	JOIN Product AS P2 ON P1.name $=$ P2.name
+	
+	\vspace{1\baselineskip}
+	JOIN Purchase ON P1.name $=$ Purchase.product
+	
+	\vspace{1\baselineskip}
+	WHERE P1.city $=$ ’Karachi’ AND P2.city <> ’Karachi’;
+	
+	\vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT buyer
+	
+	\vspace{1\baselineskip}
+	FROM Purchase
+	
+	\vspace{1\baselineskip}
+	WHERE product IN (SELECT name FROM Product WHERE city $=$ ’Karachi’)
+	
+	\vspace{1\baselineskip}
+	{\small AND buyer NOT IN (SELECT buyer FROM Purchase WHERE product IN (SELECT name FROM Product WHERE city <}
+
+        \vspace{1\baselineskip}
+	\Large\textbf{Problem 7: Products Bought by More than Five Customers }
+	
+	\textbf{Relational Algebra }
+	
+	\begin{center}
+	$\pi$name, price($\sigma$count>5($\gamma$name, price, count(Purchase)))
+	\end{center}
+	
+	
+	\textbf{SQL }
+	
+	Cartesian Product 
+	
+	SELECT name, price 
+	
+	FROM Purchase 
+	
+	GROUP BY name, price 
+	
+	HAVING COUNT($\ast$) > 5; 
+	\newpage
+	\textbf{Join }
+ 
+	SELECT name, price
+ 
+	FROM Purchase AS P
+ 
+	JOIN ( 3 SELECT product, COUNT($\ast$) AS cnt 
+	FROM Purchase 
+ 
+	GROUP BY product 
+ 
+	HAVING COUNT($\ast$) > 5 ) AS P\_cnt ON P.product $=$ P\_cnt.product; 
+ 
+	\textbf{Subquery }
+	
+	SELECT name $\textbackslash$begin$\{$verbatim$\}$ , price 
+	
+	FROM Purchase 
+	
+	WHERE product IN ( SELECT product 
+	
+	FROM Purchase 
+	
+	GROUP BY product 
+	
+	HAVING COUNT($\ast$) > 5 );
+
+        \vspace{1\baselineskip}
+	{\Large \textbf{Problem 8: Products More Expensive than Previous Years}}
+	
+	\vspace{1\baselineskip}
+	\textbf{Relational Algebra}
+	
+	\vspace{1\baselineskip}
+	name ( Product Product.name ( Product.year ¡ 2015 ( Product ) Product ) ) name (Product Product.name ( Product.year¡2015 (Product)Product))
+	
+	\vspace{1\baselineskip}
+	\textbf{SQL}
+	
+	\vspace{1\baselineskip}
+	Cartesian Product
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT P1.name
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1, Product AS P2
+	
+	\vspace{1\baselineskip}
+	WHERE P1.name $=$ P2.name AND P1.year >$=$ 2015 AND P2.year < 2015 AND P1.cost > P2.cost;
+	
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT P1.name
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1
+	
+	\vspace{1\baselineskip}
+	JOIN Product AS P2 ON P1.name $=$ P2.name AND P1.year >$=$ 2015 AND P2.year < 2015 AND P1.cost > P2.cost
+	
+	\vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT P1.name
+	
+	\vspace{1\baselineskip}
+	FROM Product AS P1
+ 
+	\vspace{1\baselineskip}
+	WHERE P1.year >$=$ 2015 AND P1.cost > ALL (SELECT        cost FROM Product 
+        WHERE name $=$ P1.name AND year < 20
+
+\vspace{1\baselineskip}
+	{\Large \textbf{Problem 9: Companies Never Selling at Loss}}
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{Relational Algebra}}
+	
+	\vspace{1\baselineskip}
+	name ( Company\ \ \ \ {\small Company.name (  Purchase.price ¡ Product.cost ( Purchase  Product  Company ) )}
+	
+	\vspace{1\baselineskip}
+	) name (Company Company.name ( Purchase.price¡Product.cost (PurchaseProductCompany)))
+	
+	\vspace{1\baselineskip}
+	{\large \textbf{SQL}}
+	
+	\vspace{1\baselineskip}
+	{\small Cartesian Product SELECT DISTINCT C.name}
+	
+	FROM Company AS C, Purchase, Product
+	
+	\vspace{1\baselineskip}
+	WHERE C.name $=$ Purchase.buyer AND Purchase.product $=$ Product.name AND Product.maker $=$ C.name AND Pur
+	
+	\vspace{1\baselineskip}
+	\textbf{Join}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT C.name
+	
+	FROM Company AS C
+	
+	\vspace{1\baselineskip}
+	JOIN Purchase ON C.name $=$ Purchase.buyer
+	
+	\vspace{1\baselineskip}
+	JOIN Product ON Purchase.product $=$ Product.name AND Product.maker $=$ C.name
+	
+	\vspace{1\baselineskip}
+	WHERE Purchase.price >$=$ Product.cost;
+	
+	\vspace{1\baselineskip}
+	\textbf{Subquery}
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT name
+	
+	\vspace{1\baselineskip}
+	FROM Company
+	
+	\vspace{1\baselineskip}
+	WHERE name NOT IN (
+	
+	\vspace{1\baselineskip}
+	SELECT DISTINCT C.name
+	
+	\vspace{1\baselineskip}
+	FROM Company AS C
+	
+	\vspace{1\baselineskip}
+	JOIN Purchase ON C.name $=$ Purchase.buyer
+	
+	\vspace{1\baselineskip}
+	JOIN Product ON Purchase.product $=$ Product.name AND Product.maker $=$ C.name
+	
+	\vspace{1\baselineskip}
+	WHERE Purchase.price < Product.cost
+ 
+	);
+ 
+\end{document}
