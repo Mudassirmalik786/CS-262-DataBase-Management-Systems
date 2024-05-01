@@ -1,0 +1,23 @@
+<!ELEMENT University (Course*, Student*, Instructor*)>
+<!ELEMENT Course (CourseId, CourseName, CreditHrs, ContactHrs, CourseInstructorId)>
+<!ELEMENT CourseId (#PCDATA)>
+<!ELEMENT CourseName (#PCDATA)>
+<!ELEMENT CreditHrs (#PCDATA)>
+<!ELEMENT ContactHrs (#PCDATA)>
+<!ELEMENT CourseInstructorId (#PCDATA)>
+<!ELEMENT Student (RegistrationNumber, Name, Address, GPA, RegisteredCourses*)>
+<!ELEMENT RegistrationNumber (#PCDATA)>
+<!ELEMENT Name (FirstName, MiddleName?, LastName)>
+<!ELEMENT FirstName (#PCDATA)>
+<!ELEMENT MiddleName (#PCDATA)>
+<!ELEMENT LastName (#PCDATA)>
+<!ELEMENT Address (City?, ZipCode?, District?)>
+<!ELEMENT City (#PCDATA)>
+<!ELEMENT ZipCode (#PCDATA)>
+<!ELEMENT District (#PCDATA)>
+<!ELEMENT GPA (#PCDATA)>
+<!ELEMENT RegisteredCourses (RegistrationDate, CourseId)>
+<!ELEMENT RegistrationDate (#PCDATA)>
+<!ELEMENT Instructor (InstructorId, Name, Designation)>
+<!ELEMENT InstructorId (#PCDATA)>
+<!ELEMENT Designation (#PCDATA)>

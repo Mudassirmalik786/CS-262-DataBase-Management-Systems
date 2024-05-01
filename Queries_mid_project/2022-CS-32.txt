@@ -1,0 +1,216 @@
+--                  30 Queries related to mid project of database.
+Query 1: Retrieve students who have not attended any class.
+Solution:
+SELECT s.FirstName, s.LastName
+FROM dbo.Student s
+WHERE s.Id NOT IN (SELECT sa.StudentId FROM dbo.StudentAttendance sa);
+
+Query 2: Retrieve the average total marks achieved by each student across all assessments.
+Solution:
+SELECT s.FirstName, s.LastName, AVG(sr.RubricMeasurementId) AS AverageTotalMarks
+FROM dbo.Student s
+JOIN dbo.StudentResult sr ON s.Id = sr.StudentId
+GROUP BY s.FirstName, s.LastName;
+
+Query 3: Retrieve all rubrics with their details and associated CLOs.
+Solution:
+SELECT r.Id, r.Details, c.Name AS CLO
+FROM dbo.Rubric r
+JOIN dbo.Clo c ON r.CloId = c.Id;
+
+Query 4: Retrieve the count of assessment components for each assessment along with the average total marks achieved in each assessment.
+Solution:
+SELECT a.Title, COUNT(ac.Id) AS TotalComponents, AVG(sr.RubricMeasurementId) AS AvgTotalMarks
+FROM dbo.Assessment a
+JOIN dbo.AssessmentComponent ac ON a.Id = ac.AssessmentId
+JOIN dbo.StudentResult sr ON ac.Id = sr.AssessmentComponentId
+GROUP BY a.Title;
+
+Query 5: Retrieve all student attendance records for a specific date.
+Solution:
+SELECT sa.StudentId, s.FirstName, s.LastName, sa.AttendanceStatus
+FROM dbo.StudentAttendance sa
+JOIN dbo.Student s ON sa.StudentId = s.Id
+JOIN dbo.ClassAttendance ca ON sa.AttendanceId = ca.Id
+WHERE ca.AttendanceDate = '2019-03-06';
+
+Query 6: Retrieve all students who were absent on a particular date.
+Solution:
+SELECT sa.StudentId, s.FirstName, s.LastName
+FROM dbo.StudentAttendance sa
+JOIN dbo.Student s ON sa.StudentId = s.Id
+JOIN dbo.Lookup l ON sa.AttendanceStatus = l.LookupId
+JOIN dbo.ClassAttendance ca ON sa.AttendanceId = ca.Id
+WHERE ca.AttendanceDate = '2019-03-06' AND l.Name = 'Absent';
+
+Query 7: Retrieve the count of students in each category of student status.
+Solution:
+SELECT l.Name AS StudentStatus, COUNT(*) AS TotalStudents
+FROM dbo.Student s
+JOIN dbo.Lookup l ON s.Status = l.LookupId
+WHERE l.Category = 'STUDENT_STATUS'
+GROUP BY l.Name;
+
+Query 8: Retrieve the latest assessment result for each student.
+Solution:
+SELECT sr.StudentId, s.FirstName, s.LastName, sr.RubricMeasurementId
+FROM dbo.StudentResult sr
+JOIN dbo.Student s ON sr.StudentId = s.Id
+WHERE sr.EvaluationDate = (SELECT MAX(EvaluationDate) FROM dbo.StudentResult WHERE StudentId = s.Id);
+
+Query 9: Retrieve all students with their corresponding assessment components and results.
+Solution:
+SELECT s.FirstName, s.LastName, ac.Name AS AssessmentComponent, sr.RubricMeasurementId
+FROM dbo.Student s
+JOIN dbo.StudentResult sr ON s.Id = sr.StudentId
+JOIN dbo.AssessmentComponent ac ON sr.AssessmentComponentId = ac.Id;
+
+Query 10: Retrieve the assessment components along with the corresponding rubric details.
+Solution:
+SELECT ac.Name AS ComponentName, r.Details AS RubricDetails
+FROM dbo.AssessmentComponent ac
+JOIN dbo.Rubric r ON ac.RubricId = r.Id;
+
+Query 11: Retrieve the total marks obtained by each student in a particular assessment.
+Solution:
+SELECT s.FirstName, s.LastName, SUM(sr.RubricMeasurementId) AS TotalMarks
+FROM dbo.Student s
+JOIN dbo.StudentResult sr ON s.Id = sr.StudentId
+JOIN dbo.AssessmentComponent ac ON sr.AssessmentComponentId = ac.Id
+JOIN dbo.Assessment a ON ac.AssessmentId = a.Id
+WHERE a.Title = 'YourAssessmentTitle'
+GROUP BY s.FirstName, s.LastName;
+
+Query 12: Retrieve details of all students along with their contact information and the status category they belong to.
+Solution:
+SELECT s.Id, s.FirstName, s.LastName, s.Email, s.Contact, l.Name AS StatusCategory
+FROM dbo.Student s
+JOIN dbo.Lookup l ON s.Status = l.LookupId
+WHERE l.Category = 'STUDENT_STATUS';
+
+Query 13: Retrieve the count of assessment components for each assessment.
+Solution:
+SELECT a.Title, COUNT(ac.Id) AS TotalComponents
+FROM dbo.Assessment a
+LEFT JOIN dbo.AssessmentComponent ac ON a.Id = ac.AssessmentId
+GROUP BY a.Title;
+
+Query 14: Retrieve all students who are currently inactive.
+Solution:
+SELECT Id, FirstName, LastName
+FROM dbo.Student
+WHERE Status = (SELECT LookupId FROM dbo.Lookup WHERE Name = 'InActive' AND Category = 'STUDENT_STATUS');
+
+Query 15: Retrieve the assessment components with the highest average total marks.
+Solution:
+SELECT ac.Name, AVG(sr.RubricMeasurementId) AS AvgTotalMarks
+FROM dbo.AssessmentComponent ac
+JOIN dbo.StudentResult sr ON ac.Id = sr.AssessmentComponentId
+GROUP BY ac.Name
+ORDER BY AvgTotalMarks DESC;
+
+Query 16: Retrieve all rubrics with their associated assessment components.
+Solution:
+SELECT r.Id, r.Details, ac.Name AS AssessmentComponent
+FROM dbo.Rubric r
+JOIN dbo.AssessmentComponent ac ON r.Id = ac.RubricId;
+
+Query 17: Retrieve the rubrics along with their corresponding CLO names.
+Solution:
+SELECT r.Id, r.Details, c.Name AS CLOName
+FROM dbo.Rubric r
+JOIN dbo.Clo c ON r.CloId = c.Id;
+
+Query 18: Retrieve the assessments along with their average total weightage.
+Solution:
+SELECT a.Title, AVG(a.TotalWeightage) AS AvgTotalWeightage
+FROM dbo.Assessment a
+JOIN dbo.AssessmentComponent ac ON a.Id = ac.AssessmentId
+GROUP BY a.Title;
+
+Query 19: Retrieve students along with their assessment results for a specific assessment.
+Solution:
+SELECT s.FirstName, s.LastName, sr.RubricMeasurementId
+FROM dbo.Student s
+JOIN dbo.StudentResult sr ON s.Id = sr.StudentId
+JOIN dbo.AssessmentComponent ac ON sr.AssessmentComponentId = ac.Id
+JOIN dbo.Assessment a ON ac.AssessmentId = a.Id
+WHERE a.Title = 'Assessment1';
+
+Query 20: Retrieve the count of assessment components for each assessment with more than one component.
+Solution:
+SELECT a.Title, COUNT(ac.Id) AS TotalComponents
+FROM dbo.Assessment a
+JOIN dbo.AssessmentComponent ac ON a.Id = ac.AssessmentId
+GROUP BY a.Title
+HAVING COUNT(ac.Id) > 1;
+
+Query 21: Retrieve all students along with their attendance status for the latest class attendance record.
+Solution:
+SELECT s.FirstName, s.LastName, sa.AttendanceStatus
+FROM dbo.Student s
+JOIN dbo.StudentAttendance sa ON s.Id = sa.StudentId
+WHERE sa.AttendanceId = (SELECT MAX(AttendanceId) FROM dbo.StudentAttendance);
+
+Query 22:Retrieve the assessment title with the lowest total weightage.
+Solution:
+SELECT TOP 1 Title, TotalWeightage
+FROM dbo.Assessment
+ORDER BY TotalWeightage ASC;
+
+Query 23: Retrieve the rubrics associated with a specific CLO.
+Solution:
+SELECT r.Id, r.Details
+FROM dbo.Rubric r
+JOIN dbo.Clo c ON r.CloId = c.Id
+WHERE c.Name = 'CLO1';
+
+Query 24: Retrieve the assessment components with the highest total weightage.
+Solution:
+SELECT ac.Name, ac.TotalMarks
+FROM dbo.AssessmentComponent ac
+JOIN (SELECT MAX(TotalMarks) AS MaxTotalMarks FROM dbo.AssessmentComponent) max_ac
+ON ac.TotalMarks = max_ac.MaxTotalMarks;
+
+Query 25: Retrieve the assessment components with the lowest total weightage.
+Solution:
+SELECT ac.Name, ac.TotalMarks
+FROM dbo.AssessmentComponent ac
+JOIN (SELECT MIN(TotalMarks) AS MinTotalMarks FROM dbo.AssessmentComponent) min_ac
+ON ac.TotalMarks = min_ac.MinTotalMarks;
+
+Query 26: Retrieve all students who have attended every class.
+Solution:
+SELECT sa.StudentId, s.FirstName, s.LastName
+FROM dbo.StudentAttendance sa
+JOIN dbo.Student s ON sa.StudentId = s.Id
+GROUP BY sa.StudentId, s.FirstName, s.LastName
+HAVING COUNT(sa.AttendanceId) = (SELECT COUNT(*) FROM dbo.ClassAttendance);
+
+Query 27: Retrieve the rubrics along with their levels.
+Solution:
+SELECT r.Id, r.Details, rl.Details AS LevelDetails
+FROM dbo.Rubric r
+JOIN dbo.RubricLevel rl ON r.Id = rl.RubricId;
+
+Query 28: Retrieve the assessment components that have not been evaluated yet.
+Solution:
+SELECT ac.Id, ac.Name
+FROM dbo.AssessmentComponent ac
+LEFT JOIN dbo.StudentResult sr ON ac.Id = sr.AssessmentComponentId
+WHERE sr.AssessmentComponentId IS NULL;
+
+Query 29: Retrieve the assessment components along with their corresponding assessments.
+Solution:
+SELECT ac.Id, ac.Name AS ComponentName, a.Title AS AssessmentTitle
+FROM dbo.AssessmentComponent ac
+JOIN dbo.Assessment a ON ac.AssessmentId = a.Id;
+
+Query 30: Retrieve the assessment components with the lowest average total marks along with the corresponding assessment titles.
+Solution:
+SELECT ac.Name AS ComponentName, a.Title AS AssessmentTitle, AVG(sr.RubricMeasurementId) AS AvgTotalMarks
+FROM dbo.AssessmentComponent ac
+JOIN dbo.Assessment a ON ac.AssessmentId = a.Id
+JOIN dbo.StudentResult sr ON ac.Id = sr.AssessmentComponentId
+GROUP BY ac.Name, a.Title
+ORDER BY AvgTotalMarks ASC;
