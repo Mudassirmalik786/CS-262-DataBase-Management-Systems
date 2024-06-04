@@ -1,0 +1,33 @@
+select SpikoCourse.CourseTitle as CourseName
+from SpikoCourse
+join SpikoSection on SpikoCourse.CourseId = SpikoSection.CourseId
+where SpikoSection.Id not in (select SectionId from SpikoStudentSection);
+
+
+select (select SpikoCourse.CourseTitle from SpikoCourse where SpikoCourse.CourseId = SC.CourseId) as CourseName
+from SpikoCourse SC
+join SpikoAnnouncement on SC.CourseId = SpikoAnnouncement.CourseId
+group by SC.CourseId
+having count(*) > 5;
+
+
+select (select SpikoStudent.FullName from SpikoStudent where SpikoStudent.StudentId = SpikoAssignmentSubmission.StudentId) as StudentName
+from SpikoStudent SC
+join SpikoAssignmentSubmission on SC.StudentId = SpikoAssignmentSubmission.StudentId
+join SpikoAssignment on SpikoAssignment.Id = SpikoAssignmentSubmission.AssignmentId
+where  Hour(SpikoAssignment.Deadline) - Hour(SpikoAssignmentSubmission.SubmittedOn) = 1;
+group by SpikoAssignmentSubmission.StudentId
+having count(*)>1
+
+select S1.RegistrationNumber as RegistrationNumber1, S2.RegistrationNumber as RegistrationNumber2 
+from SpikoStudent S1
+cross join SpikoStudent S2
+join SpikoStudentSection SSS1 on S1.StudentId = SSS1.StudentId
+join 
+
+
+
+
+
+
+
