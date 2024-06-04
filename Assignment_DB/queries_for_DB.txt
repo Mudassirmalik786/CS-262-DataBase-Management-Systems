@@ -1,0 +1,47 @@
+Query 1: Day by day count of Users for a specific month.
+SELECT DATE(timestamp) AS login_date, COUNT(DISTINCT username) AS user_count
+FROM login_history
+WHERE MONTH(timestamp) = 5 AND YEAR(timestamp) = 2023
+GROUP BY DATE(timestamp)
+ORDER BY login_date;
+
+Query 2: Query including days that have no records
+WITH AllDates AS (
+    SELECT DATEADD(day, number, '2023-01-01') AS login_date
+    FROM master.dbo.spt_values
+    WHERE type = 'P' AND DATEADD(day, number, '2023-01-01') <= '[2023-01-31]'
+)
+SELECT ad.login_date, COUNT(DISTINCT lh.username) AS user_count
+FROM AllDates ad
+LEFT JOIN login_history lh ON ad.login_date = CAST(lh.timestamp AS DATE)
+GROUP BY ad.login_date
+ORDER BY ad.login_date;
+
+Query 3: List users whose daily login time decreases continuously from a start date to end
+SELECT username
+FROM (
+    SELECT username, DATE(timestamp) AS login_date, COUNT(*) AS daily_logins,
+        LAG(COUNT(*)) OVER (PARTITION BY username ORDER BY DATE(timestamp)) AS previous_daily_logins
+    FROM login_history
+    WHERE timestamp BETWEEN '[your_start_date]' AND '[your_end_date]'
+    GROUP BY username, DATE(timestamp)
+) AS subquery
+WHERE previous_daily_logins IS NOT NULL AND daily_logins < previous_daily_logins;
+
+
+Query 4: List users who continuously logged in from a start date to end.
+SELECT username
+FROM (
+    SELECT username, DATE(timestamp) AS login_date, ROW_NUMBER() OVER (PARTITION BY username ORDER BY DATE(timestamp)) AS seqnum
+    FROM login_history
+    WHERE timestamp BETWEEN '[2023-01-01]' AND '[2023-01-23]'
+) AS subquery
+GROUP BY username, DATEDIFF(day, '[2023-01-01]', login_date) - seqnum
+HAVING COUNT(*) = MAX(seqnum) - MIN(seqnum) + 1;
+
+
+Query 5: List users' usage time in hours from a start date to end
+SELECT username, SUM(DATEDIFF(hour, timestamp, LEAD(timestamp) OVER (PARTITION BY username ORDER BY timestamp))) AS total_usage_hours
+FROM login_history
+WHERE timestamp BETWEEN '[2023-01-01]' AND '[2023-01-31]'
+GROUP BY username;
